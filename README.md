@@ -222,9 +222,13 @@ The official EMSR927 reference layer contains flood delineations over a much bro
 It may include areas far outside our selected study area.
 
 <!-- After uploading the screenshot to GitHub, replace the path below. -->
-![FloodRescue](docs/floodrescue.png)
-![EMSR927](docs/emsr.png)
-![compare](docs/compare.png)
+1.FloodRescue Map of Syapru Besi,rasuwa,Nepal
+<img width="1470" height="884" alt="Screenshot 2026-10-14 at 10 57 02 PM" src="https://github.com/user-attachments/assets/7e2d4923-f6c9-48ff-a66c-e418e6a42e44" />
+2.EMSR927 Map of Nepal
+<img width="1470" height="883" alt="Screenshot 2026-10-14 at 10 56 21 PM" src="https://github.com/user-attachments/assets/42aee0fc-9906-4e47-abcd-491ac3d86b72" />
+3. Comparison
+<img width="1470" height="874" alt="Screenshot 2026-10-14 at 10 54 59 PM" src="https://github.com/user-attachments/assets/38d89fb3-d743-4ccf-ab25-54a2a804814b" />
+
 *The visual overlay helps inspect agreement and disagreement. It is not, by itself, a quantitative accuracy measurement.*
 
 A rigorous comparison should use a common area of interest, compatible coordinate systems and spatial resolutions, and a documented method. IoU, precision, recall, and area difference should only be reported after they have been calculated from aligned data.
