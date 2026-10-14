@@ -1,0 +1,20 @@
+{
+    "area": "Syapru Besi, Rasuwa, Nepal",
+    "event_date": "2026-08-26",
+    "flooded_area_km2": 0.58,
+    "total_roads": 11847,
+    "potentially_affected_roads": 0,
+    "total_bridges": 83,
+    "potentially_affected_bridges": 0,
+    "total_buildings": 62396,
+    "potentially_affected_buildings": 0,
+    "total_settlements": 89,
+    "total_hospitals": 258,
+    "settlements_potentially_cut_off": 0,
+    "limitations": [
+        "Preliminary satellite-based flood estimate",
+        "Infrastructure intersections indicate potential impact, not confirmed damage",
+        "Connectivity is simulated and does not confirm actual road passability",
+        "Current OpenStreetMap data is used; pre-event data is still required"
+    ]
+}
