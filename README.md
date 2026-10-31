@@ -211,27 +211,43 @@ python processing/create_results.py
 
 The pipeline may also generate a raster flood mask and intermediate infrastructure layers locally. Outputs depend on the study area, event date, input data, and processing settings.
 
-## 10. Flood Map Comparison
+## 10. Example Analysis: Pokhara, Nepal
 
-FloodRescue's candidate flood extent can be compared with the official Copernicus Emergency Management Service (EMS) EMSR927 reference delineation, provided both datasets represent a matching event and geographic area.
-FloodRescue — local study area
-We focused on a small area around Syapru Besi, Rasuwa, Nepal, using a bounding box approximately 4 km × 4.4 km.
-This means we analysed a specific local region rather than the entire country.
+FloodRescue was tested using **Pokhara, Nepal**, with the flood event date set to **28 September 2024**.
 
-The official EMSR927 reference layer contains flood delineations over a much broader disaster-affected region.
-It may include areas far outside our selected study area.
+### Input
+- **Area:** Pokhara, Nepal
+- **Event date:** 2024-09-28
 
-<!-- After uploading the screenshot to GitHub, replace the path below. -->
-1.FloodRescue Map of Syapru Besi,rasuwa,Nepal
-<img width="1470" height="884" alt="Screenshot 2026-10-14 at 10 57 02 PM" src="https://github.com/user-attachments/assets/7e2d4923-f6c9-48ff-a66c-e418e6a42e44" />
-2.EMSR927 Map of Nepal
-<img width="1470" height="883" alt="Screenshot 2026-10-14 at 10 56 21 PM" src="https://github.com/user-attachments/assets/42aee0fc-9906-4e47-abcd-491ac3d86b72" />
-3. Comparison
-<img width="1470" height="874" alt="Screenshot 2026-10-14 at 10 54 59 PM" src="https://github.com/user-attachments/assets/38d89fb3-d743-4ccf-ab25-54a2a804814b" />
+The system analyses Sentinel-1 satellite radar imagery from before and after the selected event date and combines the results with OpenStreetMap infrastructure data.
 
-*The visual overlay helps inspect agreement and disagreement. It is not, by itself, a quantitative accuracy measurement.*
+### Analysis Results
 
-A rigorous comparison should use a common area of interest, compatible coordinate systems and spatial resolutions, and a documented method. IoU, precision, recall, and area difference should only be reported after they have been calculated from aligned data.
+| Parameter | Result |
+|---|---:|
+| Estimated flooded area | 9.08 km² |
+| Total roads analysed | 19,353 |
+| Potentially affected roads | 341 |
+| Total bridges | 298 |
+| Potentially affected bridges | 8 |
+| Total buildings | 177,355 |
+| Potentially affected buildings | 2,180 |
+| Settlements identified | 269 |
+| Hospitals identified | 185 |
+| Potentially cut-off settlements | 49 |
+
+### Analysis Workflow
+
+1. **Satellite-based flood detection:** Compares Sentinel-1 radar imagery to identify potential flood-affected areas.
+2. **Flood extent mapping:** Generates a geographic flood extent layer for visualization on the interactive map.
+3. **Infrastructure impact assessment:** Identifies roads, bridges and buildings intersecting the estimated flood extent.
+4. **Connectivity simulation:** Simulates the removal of potentially affected road segments and evaluates settlement connectivity to mapped hospitals.
+5. **Dashboard and reporting:** Presents the analysis results through an interactive map and summary metrics.
+
+<img width="1470" height="873" alt="Screenshot 2026-10-23 at 9 21 28 PM" src="https://github.com/user-attachments/assets/8bff22db-8ff0-432b-89a7-50ee09cd9606" />
+
+<img width="1470" height="867" alt="Screenshot 2026-10-23 at 10 12 05 PM" src="https://github.com/user-attachments/assets/77ed8585-b6c2-436c-8305-750ba7d2396d" />
+
 
 ## 11. Limitations
 
