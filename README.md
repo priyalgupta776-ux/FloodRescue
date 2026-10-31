@@ -244,7 +244,11 @@ The system analyses Sentinel-1 satellite radar imagery from before and after the
 4. **Connectivity simulation:** Simulates the removal of potentially affected road segments and evaluates settlement connectivity to mapped hospitals.
 5. **Dashboard and reporting:** Presents the analysis results through an interactive map and summary metrics.
 
+   
+
 <img width="1470" height="873" alt="Screenshot 2026-10-23 at 9 21 28 PM" src="https://github.com/user-attachments/assets/8bff22db-8ff0-432b-89a7-50ee09cd9606" />
+
+
 
 <img width="1470" height="867" alt="Screenshot 2026-10-23 at 10 12 05 PM" src="https://github.com/user-attachments/assets/77ed8585-b6c2-436c-8305-750ba7d2396d" />
 
