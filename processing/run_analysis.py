@@ -151,22 +151,13 @@ try:
     for script, args, required_files in osm_steps:
         try:
             run_script(script, *args)
+
         except subprocess.CalledProcessError as error:
-            missing = [
-                path for path in required_files
-                if not os.path.exists(path) or os.path.getsize(path) == 0
-            ]
+            raise RuntimeError(
+                f"{script} failed. Stopping analysis instead of reusing "
+                "potentially outdated infrastructure files."
+            ) from error
 
-            if missing:
-                raise RuntimeError(
-                    f"{script} failed, and these required files are missing: {missing}"
-                ) from error
-
-            print(
-                f"WARNING: {script} failed. Reusing existing infrastructure files. "
-                "These files may be outdated or for a different area.",
-                flush=True,
-            )
 
         missing = [
             path for path in required_files

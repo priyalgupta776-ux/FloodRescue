@@ -1,12 +1,33 @@
 
 import os
 import sys
+import time
 import osmnx as ox
 
-ox.settings.overpass_url = "https://overpass.kumi.systems/api"
+ox.settings.overpass_url = "https://maps.mail.ru/osm/tools/overpass/api"
 ox.settings.timeout = 180
 ox.settings.requests_timeout = 180
 
+
+def download_with_retry(download_function, description):
+    for attempt in range(4):
+        try:
+            return download_function()
+        except Exception as error:
+            if attempt == 3:
+                raise
+
+            wait_seconds = 15 * (2 ** attempt)
+            print(
+                f"{description} failed: {error}",
+                flush=True,
+            )
+            print(
+                f"Retrying in {wait_seconds} seconds "
+                f"(attempt {attempt + 2} of 4)...",
+                flush=True,
+            )
+            time.sleep(wait_seconds)
 
 # Usage:
 # python processing/osm_analysis.py west south east north
@@ -64,10 +85,13 @@ print(f"Buildings downloaded: {len(buildings)}", flush=True)
 # 2. Download the drivable road network
 print("Downloading road network...", flush=True)
 
-roads_graph = ox.graph_from_bbox(
-    bbox=bbox,
-    network_type="drive",
-    simplify=True
+roads_graph = download_with_retry(
+    lambda: ox.graph_from_bbox(
+        bbox=bbox,
+        network_type="drive",
+        simplify=True
+    ),
+    "Road network download"
 )
 
 # Save the graph for connectivity analysis

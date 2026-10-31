@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import "leaflet/dist/leaflet.css";
 import "./App.css";
 import {
@@ -7,13 +7,25 @@ import {
   TileLayer,
   GeoJSON,
   LayersControl,
+  useMap,
 } from "react-leaflet";
 
 
 const API = "http://localhost:8080/api/analysis";
 
+function MapController({ position, zoom }) {
+  const map = useMap();
 
+  useEffect(() => {
+    if (position) {
+      map.flyTo(position, zoom, {
+        duration: 1.5,
+      });
+    }
+  }, [map, position, zoom]);
 
+  return null;
+}
 
 function App() {
   const [stats, setStats] = useState(null);
@@ -24,6 +36,10 @@ function App() {
   const [floodDate, setFloodDate] = useState("");
 const [analysisStatus, setAnalysisStatus] = useState("idle");
 const [analysisMessage, setAnalysisMessage] = useState("");
+const [mapPosition, setMapPosition] = useState([27.68, 85.32]);
+const [mapZoom, setMapZoom] = useState(11);
+const [locationStatus, setLocationStatus] = useState("");
+const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -47,6 +63,52 @@ const [analysisMessage, setAnalysisMessage] = useState("");
       })
       .catch((e) => setError(e.message + ". Check that Spring Boot is running."));
   }, []);
+
+  const findLocation = async () => {
+  if (!areaName.trim()) {
+    setLocationStatus("Please enter a place name.");
+    return;
+  }
+
+  try {
+    setIsSearching(true);
+    setLocationStatus("Finding location...");
+
+    const url = new URL(
+      "https://nominatim.openstreetmap.org/search"
+    );
+
+    url.searchParams.set("q", areaName.trim());
+    url.searchParams.set("format", "jsonv2");
+    url.searchParams.set("limit", "1");
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Location search service is unavailable.");
+    }
+
+    const results = await response.json();
+
+    if (results.length === 0) {
+      setLocationStatus("Location not found. Try a more specific place name.");
+      return;
+    }
+
+    const latitude = Number(results[0].lat);
+    const longitude = Number(results[0].lon);
+
+    setMapPosition([latitude, longitude]);
+    setMapZoom(13);
+    setLocationStatus(
+      `Found: ${results[0].display_name}\nCoordinates: ${latitude}, ${longitude}`
+    );
+  } catch (err) {
+    setLocationStatus(err.message || "Could not resolve this location.");
+  } finally {
+    setIsSearching(false);
+  }
+};
 
 const runAnalysis = async () => {
   if (!areaName.trim() || !floodDate) {
@@ -140,11 +202,7 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(floodDate) ||
         <div>
           <div className="eyebrow">FLOOD RESPONSE INTELLIGENCE</div>
           <h1>FloodRescue</h1>
-          <p>Satellite-based flood assessment · {stats?.area || "Kathmandu Valley"}</p>
-        </div>
-        <div className="event">
-          <span>EVENT DATE</span>
-          <strong>{stats?.event_date || "2024-09-28"}</strong>
+          <p>Satellite-based flood assessment</p>
         </div>
       </header>
 
@@ -160,6 +218,13 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(floodDate) ||
     onChange={(e) => setAreaName(e.target.value)}
     placeholder="e.g. Kathmandu Valley, Nepal"
   />
+  <button onClick={findLocation} disabled={isSearching}>
+  {isSearching ? "Finding location..." : "Find Location on Map"}
+</button>
+
+{locationStatus && (
+  <p style={{ whiteSpace: "pre-wrap" }}>{locationStatus}</p>
+)}
 
   <label htmlFor="floodDate">Flood event date</label>
   <input
@@ -215,11 +280,16 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(floodDate) ||
 
         <MapContainer
         
+        
           center={[27.68, 85.32]}
           zoom={11}
           scrollWheelZoom
           className="map"
         >
+        <MapController
+    position={mapPosition}
+    zoom={mapZoom}
+    />
     
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
